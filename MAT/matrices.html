@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora de Matrices</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <script src="operaciones.js"defer></script>
 </head>
 <body>
   <header>
@@ -23,19 +25,39 @@
           Operaciones
         </div>
         <div class="cont-area">
-          <div class="cont-container">Suma</div>
-          <div class="cont-container">Resta</div>
-          <div class="cont-container">Multiplicacion MAT</div>
-          <div class="cont-container">Multiplicacion Escalar</div>
-          <div class="cont-container">Transposicion de Matriz</div>
-          <div class="cont-container">Determinante de matriz</div>
-          <div class="cont-container">Matriz inversa</div>
-          <div class="cont-container">Matriz identidad</div>
+          <button id="Suma" class="cont-container">Suma</button>
+          <button id="Resta" class="cont-container">Resta</button>
+          <button id="MMAT" class="cont-container">Multiplicacion MAT</button>
+          <button id="MESC" class="cont-container">Multiplicacion Escalar</button>
+          <button id="TMAT" class="cont-container">Transposicion de Matriz</button>
+          <button id="DET" class="cont-container">Determinante de matriz</button>
+          <button id="MINV" class="cont-container">Matriz inversa</button>
+          <button id="MIDT" class="cont-container">Matriz identidad</button>
         </div>
     </div>
   </div>
+  
   <div class="main">
     
+    <div class="tamanio">
+      <form action="#" id="MatTam">
+        <label for="tam">Tamaño de la matriz</label>
+          <select name="tamano" id="tam">
+            <option value="Default" selected></option>
+            <option value="2">2x2</option>
+            <option value="3">3x3</option>
+            <option value="4">4x4</option>
+            <option value="5">5x5</option>
+            <option value="6">6x6</option>
+            <option value="7">7x7</option>
+            <option value="8">8x8</option>
+            <option value="9">9x9</option>
+            <option value="10">10x10</option>
+          </select>
+        <input type="submit" value="Enviar" />
+      </form>
+    </div>
+
   </div>
 </body>
 </html>
