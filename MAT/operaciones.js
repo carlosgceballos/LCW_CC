@@ -14,7 +14,10 @@ document.addEventListener('DOMContentLoaded',function(){
     const TamSelec=parseInt(tamanioSelec); //convertir de texto a numero
     alert('Tamaño procesado');
     crearMatrices(TamSelec);
-  })
+  });
+
+
+
 });
 
 function crearMatrices(tamannio){
@@ -79,4 +82,120 @@ function procesarDatos(){
       }
   });
   return{MATA,MATB}
+}
+
+//para ejecutar operaciones con las 2 matrices
+function ejecutarope(ope){
+  const{MATA,MATB}=procesarDatos();
+  const SpaceResul = document.getElementById('SpaceResul');
+
+  if(MATA.length===0 || MATB.length===0){
+    alert('Las matrices no han sido generadas');
+    return;
+  }
+
+  SpaceResul.innerHTML=''; //limpiar resultado anterior si no se ha limpiado
+
+  const titu = document.createElement('h3');
+  const textoTit = 'Resultado - '+ope;
+  titu.textContent = textoTit;
+  SpaceResul.appendChild(titu); //anexamos nuestro elemento al DOM
+
+  try {
+    let resultado;
+
+    switch(ope){
+      case 'suma':
+        //suma de matrices
+        break;
+        case 'resta':
+          //resta de matrices
+          break;
+          case 'multiplicacion':
+            //multiplicacion
+            break;
+            default:
+              throw new Error('Operacion invalida');
+    }
+
+    //mostar resultado 
+
+    //manejo de error
+  } catch (error) {
+    const DivError = document.createElement('div');
+    DivError.className='MensajeError';
+    DivError.textContent = 'Error: '+Error.mensaje;
+    SpaceResul.appendChild(DivError);
+  }
+}
+
+//funcion para ayudarnos a seleccionar matrices en casos especificos
+function seleccionarMAT(){
+  const{MATA,MATB}=procesarDatos();
+
+  const seleccion = prompt('Selecciona Matriz:\nA: Matriz A\nB: Matriz B');
+  //si el usuario cancela retornar null
+  if(seleccion=== null) return null;
+
+  const MatSelected = seleccion.toUpperCase() === 'A' ? MATA: 
+  seleccion.toUpperCase() === 'B' ? MATB : null;
+
+  if(!MatSelected){
+    alert('Seleccion invalida');
+    return null;
+  }
+
+  return{
+    matriz: MatSelected, nombre: seleccion.toUpperCase()
+  };
+}
+
+//funcion para operacion de 1 sola matriz
+function ejecutarSeleccionando(ope){
+  const{MATA,MATB}=procesarDatos();
+  const SpaceResul= document.getElementById('SpaceResul');
+
+  //verificar que se generaron las matrices
+  if(MATA === 0){
+    alert('Necesitas generar las matrices');
+    return;
+  }
+
+  try {
+    // variables para titulo y resultado
+    let resultado;
+    let tituloOpe;
+
+    switch(ope){
+      case 'escalar':
+        const seleccMATesc = seleccionarMAT();
+        if(!seleccMATesc) return;
+        const escalar = prompt('Ingresa el valor escalar:');
+        if(escalar === null) return;
+        if(isNaN(escalar)){
+          throw new Error('Debe introducir un numero');
+        }
+
+        //resultado
+        //tituloOpe
+        break;
+
+        case 'transposicion':
+          const seleccMATtrans = seleccionarMAT();
+          if(!seleccMATesc) return;
+
+          //resultado
+          //tituloOpe
+          break;
+
+          case 'determinante':
+            const seleccMATdet = seleccionarMAT();
+            if(!seleccMATdet) return;
+
+            //resultado
+            //tituloOpe
+    }
+  } catch (error) {
+    
+  }
 }
