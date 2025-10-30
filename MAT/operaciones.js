@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('MESC').addEventListener('click', function(){
     ejecutarSeleccionando('escalar');
   });
-  document.getElementById(TMAT).addEventListener('click',function(){
+  document.getElementById('TMAT').addEventListener('click',function(){
     ejecutarSeleccionando('transposicion');
   });
   document.getElementById('DET').addEventListener('click',function(){
@@ -180,7 +180,7 @@ function ejecutarSeleccionando(ope){
   const SpaceResul= document.getElementById('SpaceResul');
 
   //verificar que se generaron las matrices
-  if(MATA === 0){
+  if(MATA.length === 0){
     alert('Necesitas generar las matrices');
     return;
   }
