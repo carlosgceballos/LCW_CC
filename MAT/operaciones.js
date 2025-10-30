@@ -16,7 +16,31 @@ document.addEventListener('DOMContentLoaded',function(){
     crearMatrices(TamSelec);
   });
 
-
+  //evntos para los botones
+  document.getElementById('Suma').addEventListener('click', function(){
+    ejecutarope('suma');
+  });
+  document.getElementById('Resta').addEventListener('click',function(){
+    ejecutarope('resta');
+  });
+  document.getElementById('MMAT').addEventListener('click', function(){
+    ejecutarope('multiplicacion')
+  });
+  document.getElementById('MESC').addEventListener('click', function(){
+    ejecutarSeleccionando('escalar');
+  });
+  document.getElementById(TMAT).addEventListener('click',function(){
+    ejecutarSeleccionando('transposicion');
+  });
+  document.getElementById('DET').addEventListener('click',function(){
+    ejecutarSeleccionando('determinante');
+  });
+  document.getElementById('MINV').addEventListener('click', function(){
+    ejecutarSeleccionando('inversa');
+  });
+  document.getElementById('MIDT').addEventListener('click',function(){
+    ejecutarSeleccionando('identidad');
+  });
 
 });
 
@@ -194,8 +218,41 @@ function ejecutarSeleccionando(ope){
 
             //resultado
             //tituloOpe
+            break;
+            
+            case 'inversa':
+              const seleccMATinv = seleccionarMAT();
+              if(!seleccMATinv) return;
+
+              //resultado
+              //titulo ope
+              break;
+
+              case 'identidad':
+                const selectTam = prompt('Selecciona el tamaño de la matriz identidad:')
+                if(selectTam === null)return;
+
+                const tamanio = parseInt(selectTam);
+
+                if(isNaN(tamanio)){
+                  alert('Debes ser un numero (2-10)');
+                  return;
+                }
+
+                if(tamanio<2 || tamanio >10){
+                  alert('El tamaño debe ser entre 2 y 10');
+                  return;
+                }
+
+                //resultado
+                //titulo ope
+                break;
+
+                default:
+                  throw new Error('Operacion invalida');
     }
   } catch (error) {
-    
+    alert('Error: '+error.mensaje)
   }
 }
+
