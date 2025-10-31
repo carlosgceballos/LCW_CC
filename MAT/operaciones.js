@@ -150,7 +150,6 @@ function ejecutarope(ope){
 
   SpaceResul.innerHTML=''; //limpiar resultado anterior si no se ha limpiado
 
-  
   try {
     let resultado;
     let tituOpe;
@@ -165,14 +164,16 @@ function ejecutarope(ope){
           tituOpe='Resta de matrices'
           break;
           case 'multiplicacion':
-            //multiplicacion
+            resultado=crearMATmulti(MATA, MATB);
+            tituOpe='Multiplicacion de matrices'
             break;
             default:
               throw new Error('Operacion invalida');
             }
             
             const titu = document.createElement('h3');
-            const textoTit = 'Resultado - '+ope;
+            titu.className = 'TituResulOpe';
+            const textoTit = 'Resultado: '+ope;
             titu.textContent = textoTit;
             SpaceResul.appendChild(titu); //anexamos nuestro elemento al DOM
 
@@ -230,9 +231,8 @@ function ejecutarSeleccionando(ope){
         if(isNaN(escalar)){
           throw new Error('Debe introducir un numero');
         }
-
-        //resultado
-        //tituloOpe
+        resultado=crearMATesca(seleccMATesc.matriz,escalar)
+        tituloOpe="Multiplicacion de Matriz x Escalar"
         break;
 
         case 'transposicion':
@@ -393,6 +393,39 @@ function crearMATres(MATA, MATB){
     resultado[i]=[];
     for(let j = 0; j<MATA[i].length;j++){
       resultado[i][j]=MATA[i][j]-MATB[i][j];
+    }
+  }
+  return resultado;
+}
+
+function crearMATmulti(MATA, MATB){
+  //validar columna A = filas B
+  if(MATA[0].length !== MATB.length){
+    throw new Error('Las columnas de A deben ser igual a las filas de B');
+  }
+
+  const resultado = [];
+  //producto punto
+  for(let i=0; i<MATA.length;i++){
+    resultado[i]=[];
+    for(j=0;j<MATB[0].length;j++){
+      let suma=0;
+      for(let k = 0; k<MATA[0].length;k++){
+        suma+= MATA[i][k]*MATB[k][j];
+      }
+      resultado[i][j]=suma;
+    }
+  }
+  return resultado;
+}
+
+function crearMATesca(MAT,escalar){
+  const resultado = [];
+  //multiplicacion por el escalar cada elemento
+  for(let i=0; i<MAT.length; i++){
+    resultado[i]=[];
+    for(let j=0; j<MAT[i].length;j++){
+      resultado[i][j]=MAT[i][j]*escalar;
     }
   }
   return resultado;
