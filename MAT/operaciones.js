@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded',function(){
   const matrixTam = document.getElementById('MatTam') //obtener refe del formulario
 
   MatTam.addEventListener('submit',function(e){
+    e.preventDefault();
 
     const selecc= document.getElementById('tam');
     const tamanioSelec= selecc.value;
@@ -93,6 +94,7 @@ function procesarDatos(){
   inputs.forEach(input => {
     const fila = parseInt(input.dataset.fila);
     const columna = parseInt(input.dataset.columna);
+    const matrizNum = parseInt(input.dataset.MAT);
     const valor = input.value === '' ? 0 : parseFloat(input.value);
     //                 si esta vacio, usa 0, si no esta vacio, convertir el input a numero
 
@@ -244,15 +246,73 @@ function ejecutarSeleccionando(ope){
                   return;
                 }
 
-                //resultado
+                resultado=crearMatIDT(tamanio);
+                tituloOpe='Matriz identidad('+tamanio+'x'+tamanio+')';
                 //titulo ope
                 break;
 
                 default:
                   throw new Error('Operacion invalida');
     }
+    mostrarResultado(resultado, tituloOpe);
   } catch (error) {
     alert('Error: '+error.mensaje)
   }
 }
+
+function mostrarResultado(resultado, titulo){
+  const SpaceResul = document.getElementById('SpaceResul');
+  const contResul = document.createElement('div');
+  contResul.className = 'ResulCont';
+
+  const tituloElem = document.createElement('h3');
+  tituloElem.className = 'TituloResul';
+  tituloElem.textContent = titulo;
+  contResul.appendChild(tituloElem);
+
+  if(typeof resultado === 'number'){
+    //para el determinante con 4 decimales
+    const ValorElem = document.createElement('div');
+    ValorElem.className= 'ValorResul';
+    ValorElem.textContent='Valor '+resultado.toFixed(4);
+    contResul.appendChild(ValorElem);
+
+  }else{
+    //para las matrices
+    const MATResultado = document.createElement('div');
+    MATResultado.className = 'ResultadoMAT';
+    MATResultado.style.gridTemplateColumns = 'repeat('+resultado[0].length+', 70px)';
+
+    for(let i = 0; i <resultado.length;i++){
+      for(let j=0; j<resultado[i].length;j++){
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = "ResultadoInput";
+
+        const valor = resultado[i][j];
+        if(Number.isInteger(valor)){
+          input.value = valor;
+        }else{
+          input.value = valor.toFixed(4);
+        }
+        input.readOnly=true;
+        MATResultado.appendChild(input);
+      }
+    }
+    contResul.appendChild(MATResultado);
+  }
+  SpaceResul.appendChild(contResul);
+}
+
+function crearMatIDT(tamanio){
+  const identidad = [];
+  for(let i = 0; i < tamanio; i++){
+    identidad[i]=[];
+    for(let j = 0; j<tamanio;j++){
+      identidad[i][j]= i === j ? 1 : 0;
+    }
+  }
+  return identidad;
+}
+
 

@@ -130,3 +130,52 @@ img{
   color: black;
   font-family: 'Poppins', sans-serif;
 }
+
+#SpaceResul {
+    margin: 25px 0;
+    padding: 0;
+}
+
+.ResulCont {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    border: 3px solid #9c1414; 
+    box-shadow: 0 6px 15px rgba(156, 20, 20, 0.2);
+    margin-bottom: 25px;
+}
+
+.TituloResul {
+    color: #9c1414;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border-bottom: 2px solid #9c1414;
+    padding-bottom: 10px;
+}
+
+.ResultadoMAT {
+    display: grid;
+    gap: 10px;
+    justify-content: center;
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f8f9fa; 
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+}
+
+.ResultadoInput {
+  width: 65px;
+  height: 55px;
+  text-align: center;
+  border: 2px solid #9c1414;
+  border-radius: 8px;
+  font-size: 18px;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
