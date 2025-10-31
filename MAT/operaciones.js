@@ -2,20 +2,26 @@
 document.addEventListener('DOMContentLoaded',function(){
   const matrixTam = document.getElementById('MatTam') //obtener refe del formulario
 
-  MatTam.addEventListener('submit',function(e){
-    e.preventDefault();
+MatTam.addEventListener('submit',function(e){
+  e.preventDefault();
 
-    const selecc= document.getElementById('tam');
-    const tamanioSelec= selecc.value;
+  const seleccA = document.getElementById('tamA');
+  const seleccB = document.getElementById('tamB');
+  const tamanioA = seleccA.value;
+  const tamanioB = seleccB.value;
 
-    if(tamanioSelec==='Default'){ //alerta de error en tamanio
-      alert('Selecciona un tamaño');
-      return
-    }
-    const TamSelec=parseInt(tamanioSelec); //convertir de texto a numero
-    alert('Tamaño procesado');
-    crearMatrices(TamSelec);
-  });
+  if(tamanioA === 'Default' || tamanioB === 'Default'){
+    alert('Selecciona tamaños para ambas matrices');
+    return;
+  }
+  
+  //convertir de texto a num
+  const TamA = parseInt(tamanioA);
+  const TamB = parseInt(tamanioB);
+
+  alert('Tamaños procesados: Matriz A ' + TamA + 'x' + TamA + ', Matriz B ' + TamB + 'x' + TamB);
+  crearMatrices(TamA, TamB); // Pasar ambos tamaños
+});
 
   //evntos para los botones
   document.getElementById('Suma').addEventListener('click', function(){
@@ -48,44 +54,63 @@ document.addEventListener('DOMContentLoaded',function(){
 
 });
 
-function crearMatrices(tamannio){
+function crearMatrices(tamannioA, tamannioB){
   const spaceMat = document.getElementById('SpaceMat')
-  spaceMat.innerHTML=''; //limpiar automaticamente las matrices anteriores
+  spaceMat.innerHTML='';//limpiar el espacio
   
-  for(let matrizNum =1; matrizNum<=2;matrizNum++){
-    //contenedor de las matrices
-    const secMatriz = document.createElement('div');
-    secMatriz.className = 'MatSecc';
-    //titulo de la matriz (a o b)
-    const tit = document.createElement('h3');
-    const textMatriz = 'Matriz ' + (matrizNum === 1 ? 'A' : 'B') + ' (' + tamannio + 'x' + tamannio + ')';
-    tit.textContent=textMatriz;
-    secMatriz.appendChild(tit);  
+  // Crear Matriz A con su tamaño
+  const secMatrizA = document.createElement('div');
+  secMatrizA.className = 'MatSecc';
+  const titA = document.createElement('h3');
+  titA.textContent = 'Matriz A (' + tamannioA + 'x' + tamannioA + ')';
+  secMatrizA.appendChild(titA);
 
-    //grid para los inputs
-    const gridCont = document.createElement('div');
-    gridCont.className='GridMat';
-    gridCont.style.gridTemplateColumns = 'repeat(' + tamannio + ', 70px)';
+  const gridContA = document.createElement('div');
+  gridContA.className='GridMat';
+  gridContA.style.gridTemplateColumns = 'repeat(' + tamannioA + ', 70px)';
 
-    for (let i = 0; i<tamannio;i++){
-      for(let j = 0; j<tamannio; j++){
+  for (let i = 0; i < tamannioA; i++){
+    for(let j = 0; j < tamannioA; j++){
       const input = document.createElement('input');
       input.type = 'number';
       input.className = 'matInput';
       input.placeholder='0';
       input.value='';
-
-      //guardando los lugares de celda
       input.dataset.fila = i;
       input.dataset.columna = j;
-      input.dataset.MAT = matrizNum;
-
-      gridCont.appendChild(input);
-      }
+      input.dataset.MAT = 1; // Matriz A
+      gridContA.appendChild(input);
     }
-    secMatriz.appendChild(gridCont);
-    spaceMat.appendChild(secMatriz);
   }
+  secMatrizA.appendChild(gridContA);
+  spaceMat.appendChild(secMatrizA);
+
+  // Crear Matriz B con su tamaño
+  const secMatrizB = document.createElement('div');
+  secMatrizB.className = 'MatSecc';
+  const titB = document.createElement('h3');
+  titB.textContent = 'Matriz B (' + tamannioB + 'x' + tamannioB + ')';
+  secMatrizB.appendChild(titB);
+
+  const gridContB = document.createElement('div');
+  gridContB.className='GridMat';
+  gridContB.style.gridTemplateColumns = 'repeat(' + tamannioB + ', 70px)';
+
+  for (let i = 0; i < tamannioB; i++){
+    for(let j = 0; j < tamannioB; j++){
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.className = 'matInput';
+      input.placeholder='0';
+      input.value='';
+      input.dataset.fila = i;
+      input.dataset.columna = j;
+      input.dataset.MAT = 2; // Matriz B
+      gridContB.appendChild(input);
+    }
+  }
+  secMatrizB.appendChild(gridContB);
+  spaceMat.appendChild(secMatrizB);
 }
 
 function procesarDatos(){
@@ -125,17 +150,15 @@ function ejecutarope(ope){
 
   SpaceResul.innerHTML=''; //limpiar resultado anterior si no se ha limpiado
 
-  const titu = document.createElement('h3');
-  const textoTit = 'Resultado - '+ope;
-  titu.textContent = textoTit;
-  SpaceResul.appendChild(titu); //anexamos nuestro elemento al DOM
-
+  
   try {
     let resultado;
-
+    let tituOpe;
+    
     switch(ope){
       case 'suma':
-        //suma de matrices
+        resultado=crearMATsum(MATA, MATB);
+        tituOpe = 'Suma de matrices'
         break;
         case 'resta':
           //resta de matrices
@@ -145,21 +168,23 @@ function ejecutarope(ope){
             break;
             default:
               throw new Error('Operacion invalida');
-    }
+            }
+            
+            const titu = document.createElement('h3');
+            const textoTit = 'Resultado - '+ope;
+            titu.textContent = textoTit;
+            SpaceResul.appendChild(titu); //anexamos nuestro elemento al DOM
 
-    //mostar resultado 
-
-    //manejo de error
-  } catch (error) {
-    const DivError = document.createElement('div');
-    DivError.className='MensajeError';
-    DivError.textContent = 'Error: '+Error.mensaje;
-    SpaceResul.appendChild(DivError);
-  }
-}
-
-//funcion para ayudarnos a seleccionar matrices en casos especificos
-function seleccionarMAT(){
+            mostrarResultado(resultado,tituOpe);
+            
+            //manejo de error
+          } catch (error) {
+            alert('Error: '+error.message);
+          }
+        }
+        
+        //funcion para ayudarnos a seleccionar matrices en casos especificos
+        function seleccionarMAT(){
   const{MATA,MATB}=procesarDatos();
 
   const seleccion = prompt('Selecciona Matriz:\nA: Matriz A\nB: Matriz B');
@@ -211,10 +236,10 @@ function ejecutarSeleccionando(ope){
 
         case 'transposicion':
           const seleccMATtrans = seleccionarMAT();
-          if(!seleccMATesc) return;
+          if(!seleccMATtrans) return;
 
-          //resultado
-          //tituloOpe
+          resultado= crearMATtrans(seleccMATtrans.matriz);
+          tituloOpe='Transposicion (Matriz '+seleccMATtrans.nombre+')';
           break;
 
           case 'determinante':
@@ -328,4 +353,31 @@ function clear(){
   alert('Limpieza completada');
 }
 
+function crearMATtrans(MAT){
+  const resultado=[];
+  //intercambiamos las filas por columnas
+  for(let i=0; i<MAT[0].length; i++){
+    resultado[i]=[];
+    for(let j=0;j<MAT.length;j++){
+      resultado[i][j]=MAT[j][i];
+    }
+  }
+  return resultado;
+}
 
+function crearMATsum(MATA, MATB){
+  if(MATA.length !== MATB.length || MATA[0].length !== MATB[0].length){
+    //filas o columnas
+    throw new Error('Las matrices no tienen las mismas dimensiones');
+  }
+
+  const resultado=[];
+  //sumamos elemto por elemento
+  for(let i=0; i<MATA.length;i++){
+    resultado[i]=[];
+    for(let j = 0; j<MATA[i].length;j++){
+      resultado[i][j]=MATA[i][j]+MATB[i][j];
+    }
+  }
+  return resultado;
+}
