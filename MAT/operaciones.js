@@ -161,7 +161,8 @@ function ejecutarope(ope){
         tituOpe = 'Suma de matrices'
         break;
         case 'resta':
-          //resta de matrices
+          resultado=crearMATres(MATA,MATB);
+          tituOpe='Resta de matrices'
           break;
           case 'multiplicacion':
             //multiplicacion
@@ -377,6 +378,21 @@ function crearMATsum(MATA, MATB){
     resultado[i]=[];
     for(let j = 0; j<MATA[i].length;j++){
       resultado[i][j]=MATA[i][j]+MATB[i][j];
+    }
+  }
+  return resultado;
+}
+
+function crearMATres(MATA, MATB){
+  if(MATA.length !== MATB.length || MATA[0].length !== MATB[0].length){
+    throw new Error('Las matrices no tienen las mismas dimensiones');
+  }
+
+  const resultado=[];
+  for(let i=0; i<MATA.length;i++){
+    resultado[i]=[];
+    for(let j = 0; j<MATA[i].length;j++){
+      resultado[i][j]=MATA[i][j]-MATB[i][j];
     }
   }
   return resultado;
