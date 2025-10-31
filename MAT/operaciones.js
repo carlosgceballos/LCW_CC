@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('MIDT').addEventListener('click',function(){
     ejecutarSeleccionando('identidad');
   });
+  document.getElementById('erase').addEventListener('dblclick', function(){
+    clear();
+  })
 
 });
 
@@ -313,6 +316,16 @@ function crearMatIDT(tamanio){
     }
   }
   return identidad;
+}
+
+function clear(){
+  const spaceMat = document.getElementById('SpaceMat');
+  spaceMat.innerHTML='';
+
+  const SpaceResul = document.getElementById('SpaceResul');
+  SpaceResul.innerHTML='';
+
+  alert('Limpieza completada');
 }
 
 
