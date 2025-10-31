@@ -185,3 +185,16 @@ img{
   color: black;
   font-family: 'Poppins', sans-serif;
 }
+
+.ValorResul{
+  text-align: center;
+  border: 2px solid #9c1414;
+  border-radius: 8px;
+  font-size: 18px;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  padding: 15px 25px;
+  margin: 10px auto;
+  width: fit-content;
+}
