@@ -51,6 +51,9 @@ MatTam.addEventListener('submit',function(e){
   document.getElementById('erase').addEventListener('dblclick', function(){
     clear();
   })
+  document.getElementById('random').addEventListener('click', function(){
+  randomNumb();
+  });
 
 });
 
@@ -429,4 +432,20 @@ function crearMATesca(MAT,escalar){
     }
   }
   return resultado;
+}
+
+function randomNumb(){
+  console.log('Funcion Random ejecutada')
+  const inputs = document.querySelectorAll('.matInput');
+  console.log('Inputs checkk')
+  if(inputs.length === 0){
+    alert('Matrices no generadas');
+    return;
+  }
+
+  inputs.forEach(input =>{
+    const randomNumber = Math.floor(Math.random() * 21)-10;
+    console.log('Asignando',randomNumb, 'a input');
+    input.value = randomNumber; 
+  })
 }
