@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Trivia Interactivo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="contenedorPrincipal">
+        <!-- Pantalla de configuración inicial -->
+        <div id="pantConfig" class="pantalla activa">
+            <h1>Juego de Trivia</h1>
+            <div class="formuConfig">
+                <div class="campoForm">
+                    <label for="inputNombre">Nombre del jugador:</label>
+                    <input type="text" id="inputNombre" placeholder="Ingresa tu nombre (2-20 caracteres)" maxlength="20">
+                    <span class="msgError" id="errorNombre"></span>
+                </div>
+
+                <div class="campoForm">
+                    <label for="inputCantPreg">Cantidad de preguntas:</label>
+                    <input type="number" id="inputCantPreg" min="5" max="20" value="10">
+                    <span class="msgError" id="errorCantidad"></span>
+                </div>
+
+                <div class="campoForm">
+                    <label for="selectDificultad">Nivel de dificultad:</label>
+                    <select id="selectDificultad">
+                        <option value="easy">Fácil</option>
+                        <option value="medium">Medio</option>
+                        <option value="hard">Difícil</option>
+                    </select>
+                </div>
+
+                <div class="campoForm">
+                    <label for="selectCategoria">Categoría:</label>
+                    <select id="selectCategoria">
+                        <option value="">Mixtas (Todas las categorías)</option>
+                        <option value="9">Cultura General</option>
+                        <option value="21">Deportes</option>
+                        <option value="23">Historia</option>
+                        <option value="22">Geografía</option>
+                        <option value="17">Ciencia y Naturaleza</option>
+                        <option value="18">Computación</option>
+                    </select>
+                </div>
+
+                <button id="btnIniciar" class="btnPrincipal">Iniciar Juego</button>
+            </div>
+        </div>
+
+        <!-- Pantalla de carga -->
+        <div id="pantCarga" class="pantalla">
+            <div class="contCarga">
+                <div class="spinnerCarga"></div>
+                <p>Cargando preguntas...</p>
+            </div>
+        </div>
+
+        <!-- Pantalla de juego -->
+        <div id="pantJuego" class="pantalla">
+            <div class="headerJuego">
+                <div class="infoJugador">
+                    <span id="displayNombre"></span>
+                </div>
+                <div class="contProgreso">
+                    <span id="numPregActual">1</span> de <span id="totalPreguntas">10</span>
+                </div>
+                <div class="contPuntos">
+                    Puntos: <span id="puntosActuales">0</span>
+                </div>
+            </div>
+
+            <div class="contTemporizador">
+                <div class="temporizador" id="temporizador">
+                    <span id="segundosRestantes">20</span>s
+                </div>
+                <div class="barraTiempo">
+                    <div class="progresoTiempo" id="barraProgreso"></div>
+                </div>
+            </div>
+
+            <div id="contPregunta" class="contPregunta">
+                <!-- Aquí se renderizarán las preguntas dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Pantalla de resultados -->
+        <div id="pantResultados" class="pantalla">
+            <h1>🏆 Resultados Finales</h1>
+            <div class="contResultados">
+                <div class="itemResultado">
+                    <span class="etiquetaResultado">Jugador:</span>
+                    <span class="valorResultado" id="resNombre"></span>
+                </div>
+                <div class="itemResultado destacado">
+                    <span class="etiquetaResultado">Puntuación Total:</span>
+                    <span class="valorResultado" id="resPuntos"></span>
+                </div>
+                <div class="itemResultado">
+                    <span class="etiquetaResultado">Respuestas Correctas:</span>
+                    <span class="valorResultado" id="resCorrectas"></span>
+                </div>
+                <div class="itemResultado">
+                    <span class="etiquetaResultado">Porcentaje de Aciertos:</span>
+                    <span class="valorResultado" id="resPorcentaje"></span>
+                </div>
+                <div class="itemResultado">
+                    <span class="etiquetaResultado">Tiempo Promedio por Pregunta:</span>
+                    <span class="valorResultado" id="resTiempo"></span>
+                </div>
+            </div>
+
+            <div class="contBotonesFinal">
+                <button id="btnMismaConfig" class="btnPrincipal">Jugar de Nuevo</button>
+                <button id="btnNuevaConfig" class="btnSecundario">Nueva Configuración</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
