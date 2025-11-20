@@ -193,7 +193,7 @@ class JuegoTrivia {
     tiempoAgotado() {
         this.detenerTemporizador();
         
-        // Registrar tiempo de respuesta (tiempo completo)
+        // Registrar tiempo de respuesta
         this.tiemposRespuesta.push(20);
 
         // Mostrar respuesta correcta
@@ -211,6 +211,61 @@ class JuegoTrivia {
         setTimeout(() => {
             this.siguientePregunta();
         }, 2000);
+    }
+
+    manejarRespuesta(esCorrecta) {
+        this.detenerTemporizador();
+
+        // Calcular tiempo empleado
+        const tiempoEmpleado = (Date.now() - this.tiempoInicioPregunta) / 1000;
+        this.tiemposRespuesta.push(tiempoEmpleado);
+
+        if (esCorrecta) {
+            this.puntuacion += 10;
+            this.respuestasCorrectas++;
+        }
+
+        // Actualizar puntuacion
+        document.getElementById('puntosActuales').textContent = this.puntuacion;
+
+        // Avanzar a la siguiente pregunta
+        setTimeout(() => {
+            this.siguientePregunta();
+        }, 2000);
+    }
+
+    siguientePregunta() {
+        this.preguntaActual++;
+        this.mostrarPregunta();
+    }
+
+    finalizarJuego() {
+        this.mostrarPantalla('pantResultados');
+
+        // Calcular estadísticas
+        const porcentaje = ((this.respuestasCorrectas / this.cantidadPreguntas) * 100).toFixed(1);
+        const tiempoPromedio = (this.tiemposRespuesta.reduce((a, b) => a + b, 0) / this.tiemposRespuesta.length).toFixed(1);
+
+        // Mostrar resultados
+        document.getElementById('resNombre').textContent = this.nombreJugador;
+        document.getElementById('resPuntos').textContent = this.puntuacion;
+        document.getElementById('resCorrectas').textContent = `${this.respuestasCorrectas} / ${this.cantidadPreguntas}`;
+        document.getElementById('resPorcentaje').textContent = porcentaje + '%';
+        document.getElementById('resTiempo').textContent = tiempoPromedio + 's';
+    }
+
+    reiniciarMismaConfiguracion() {
+        this.obtenerPreguntas();
+    }
+
+    nuevaConfiguracion() {
+        // Limpiar formulario
+        document.getElementById('inputNombre').value = '';
+        document.getElementById('inputCantPreg').value = 10;
+        document.getElementById('selectDificultad').value = 'medium';
+        document.getElementById('selectCategoria').value = '';
+        
+        this.mostrarPantalla('pantConfig');
     }
 
     mostrarPantalla(idPantalla) {
