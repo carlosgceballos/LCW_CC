@@ -110,6 +110,109 @@ class JuegoTrivia {
         }
     }
 
+    iniciarJuego() {
+        this.preguntaActual = 0;
+        this.puntuacion = 0;
+        this.respuestasCorrectas = 0;
+        this.tiemposRespuesta = [];
+
+        // Actualizar información del jugador
+        document.getElementById('displayNombre').textContent = this.nombreJugador;
+        document.getElementById('totalPreguntas').textContent = this.cantidadPreguntas;
+        this.mostrarPantalla('pantJuego');
+        this.mostrarPregunta();
+    }
+
+    mostrarPregunta() {
+        if (this.preguntaActual >= this.preguntas.length) {
+            this.finalizarJuego();
+            return;
+        }
+
+        const pregunta = this.preguntas[this.preguntaActual];
+        
+        // Actualizar progreso
+        document.getElementById('numPregActual').textContent = this.preguntaActual + 1;
+        document.getElementById('puntosActuales').textContent = this.puntuacion;
+
+        // Crear componente de pregunta
+        const preguntaComponente = new ComponentePregunta(
+            pregunta,
+            (esCorrecta) => this.manejarRespuesta(esCorrecta)
+        );
+
+        const container = document.getElementById('contPregunta');
+        container.innerHTML = '';
+        preguntaComponente.render(container);
+
+        // Iniciar temporizador
+        this.iniciarTemporizador();
+        this.tiempoInicioPregunta = Date.now();
+    }
+
+    iniciarTemporizador() {
+        this.tiempoRestante = 20;
+        this.actualizarTemporizador();
+
+        this.temporizadorId = setInterval(() => {
+            this.tiempoRestante--;
+            this.actualizarTemporizador();
+
+            if (this.tiempoRestante <= 0) {
+                this.tiempoAgotado();
+            }
+        }, 1000);
+    }
+
+    actualizarTemporizador() {
+        const segundosElement = document.getElementById('segundosRestantes');
+        const temporizadorElement = document.getElementById('temporizador');
+        const barraProgreso = document.getElementById('barraProgreso');
+
+        segundosElement.textContent = this.tiempoRestante;
+
+        // Calcular porcentaje de tiempo restante
+        const porcentaje = (this.tiempoRestante / 20) * 100;
+        barraProgreso.style.width = porcentaje + '%';
+
+        // Añadir urgencia
+        if (this.tiempoRestante < 5) {
+            temporizadorElement.classList.add('urgente');
+        } else {
+            temporizadorElement.classList.remove('urgente');
+        }
+    }
+
+    detenerTemporizador() {
+        if (this.temporizadorId) {
+            clearInterval(this.temporizadorId);
+            this.temporizadorId = null;
+        }
+    }
+
+    tiempoAgotado() {
+        this.detenerTemporizador();
+        
+        // Registrar tiempo de respuesta (tiempo completo)
+        this.tiemposRespuesta.push(20);
+
+        // Mostrar respuesta correcta
+        const pregunta = this.preguntas[this.preguntaActual];
+        const opciones = document.querySelectorAll('.opcion');
+        
+        opciones.forEach(opcion => {
+            opcion.classList.add('deshabilitada');
+            if (opcion.dataset.respuesta === pregunta.correct_answer) {
+                opcion.classList.add('correcta');
+            }
+        });
+
+        // Avanzar a la siguiente pregunta
+        setTimeout(() => {
+            this.siguientePregunta();
+        }, 2000);
+    }
+
     mostrarPantalla(idPantalla) {
         // Ocultar todas las pantallas
         document.querySelectorAll('.pantalla').forEach(pantalla => {
@@ -121,7 +224,97 @@ class JuegoTrivia {
     }
 }
 
-// INICIALIZAR APLICACIÓN
+class ComponentePregunta {
+    constructor(pregunta, onRespuesta) {
+        this.pregunta = pregunta;
+        this.onRespuesta = onRespuesta;
+        this.respondida = false;
+        this.elemento = null;
+    }
+
+    render(contenedor) {
+        // Crear elemento contenedor
+        this.elemento = document.createElement('div');
+        const preguntaTexto = this.decodificarHTML(this.pregunta.question);
+        
+        const textoPregunta = document.createElement('div');
+        textoPregunta.className = 'textoPregunta';
+        textoPregunta.textContent = preguntaTexto;
+        const opcionesContainer = document.createElement('div');
+        opcionesContainer.className = 'contOpciones';
+        
+        // Mezclar respuestas correcta e incorrectas
+        const todasOpciones = [
+            ...this.pregunta.incorrect_answers,
+            this.pregunta.correct_answer
+        ];
+        this.mezclarArray(todasOpciones);
+        
+        // Crear botones de opciones
+        todasOpciones.forEach(opcion => {
+            const botonOpcion = this.crearOpcion(opcion);
+            opcionesContainer.appendChild(botonOpcion);
+        });
+        
+        // Agregar al contenedor
+        this.elemento.appendChild(textoPregunta);
+        this.elemento.appendChild(opcionesContainer);
+        contenedor.appendChild(this.elemento);
+    }
+
+    crearOpcion(textoOpcion) {
+        const opcion = document.createElement('button');
+        opcion.className = 'opcion';
+        opcion.textContent = this.decodificarHTML(textoOpcion);
+        opcion.dataset.respuesta = textoOpcion;
+        
+        opcion.addEventListener('click', () => {
+            this.seleccionarOpcion(opcion);
+        });
+        
+        return opcion;
+    }
+
+    seleccionarOpcion(opcionSeleccionada) {
+        if (this.respondida) return;
+        
+        this.respondida = true;
+        const esCorrecta = opcionSeleccionada.dataset.respuesta === this.pregunta.correct_answer;
+        
+        // Deshabilitar todas las opciones
+        const todasOpciones = this.elemento.querySelectorAll('.opcion');
+        todasOpciones.forEach(opcion => {
+            opcion.classList.add('deshabilitada');
+            
+            // Marcar correcta
+            if (opcion.dataset.respuesta === this.pregunta.correct_answer) {
+                opcion.classList.add('correcta');
+            }
+            
+            // Marcar incorrecta si fue seleccionada y es incorrecta
+            if (opcion === opcionSeleccionada && !esCorrecta) {
+                opcion.classList.add('incorrecta');
+            }
+        });
+        
+        // Notificar resultado
+        this.onRespuesta(esCorrecta);
+    }
+
+    mezclarArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    decodificarHTML(texto) {
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = texto;
+        return textarea.value;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     new JuegoTrivia();
 });
